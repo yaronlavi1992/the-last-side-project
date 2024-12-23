@@ -5,11 +5,11 @@
 	import type { AuthChangeEvent } from '@supabase/supabase-js';
 
 	let { data, children } = $props<{ data: LayoutData }>();
-	let { user, session, supabase } = $derived(data);
+	let { user, supabase } = $derived(data);
 
 	$effect(() => {
 		const { data: authData } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent) => {
-			if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+			if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
 				invalidate('supabase:auth');
 			}
 		});
@@ -19,7 +19,7 @@
 </script>
 
 <div class="min-h-screen">
-	{#key session?.user?.id ?? 'no-session'}
+	{#key user?.id ?? 'no-user'}
 		{@render children()}
 	{/key}
 </div>
