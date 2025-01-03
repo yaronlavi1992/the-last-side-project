@@ -1,7 +1,7 @@
 import { getOrCreateUserProfile } from "$lib/auth"
 import { db } from "$lib/server/db/index.js"
 import { profileTable } from "$lib/server/db/schema.js"
-import { error, redirect } from "@sveltejs/kit"
+import { error } from "@sveltejs/kit"
 import { eq } from "drizzle-orm"
 import { zfd } from "zod-form-data"
 
@@ -9,7 +9,7 @@ export const load = async ({ locals }) => {
     const userProfile = await getOrCreateUserProfile(locals)
 
     if (!userProfile) {
-        redirect(307, '/auth/login');
+        error(401, 'You need to be logged in to view this page!')
     }
 
     return {
@@ -45,4 +45,4 @@ export const actions = {
 
         return { success: true };
     }
-}
+} 

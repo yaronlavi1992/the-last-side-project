@@ -1,69 +1,18 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { invalidate } from '$app/navigation';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import CardContent from '$lib/components/ui/card/card-content.svelte';
-	import CardHeader from '$lib/components/ui/card/card-header.svelte';
-	import Card from '$lib/components/ui/card/card.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
-	import { formData } from 'zod-form-data';
+	import Package2 from 'lucide-svelte/icons/package-2';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	const { data } = $props();
 	const { userProfile } = data;
-
-	let firstName = $state('');
-	let lastName = $state('');
-	let email = $state('');
-
-	$effect(() => {
-		if (userProfile) {
-			firstName = userProfile.firstName;
-			lastName = userProfile.lastName;
-			email = userProfile.email;
-		}
-	});
 </script>
 
-{#if data.userProfile}
-	<Card>
-		<CardHeader>Manage your profile</CardHeader>
-		<CardContent>
-			<form
-				method="post"
-				use:enhance={({ formData }) => {
-					formData.set('firstName', firstName);
-					formData.set('lastName', lastName);
-					formData.set('email', email);
-					return ({ result }) => {
-						if (result.type === 'success') {
-							invalidate('/');
-							alert('UPDATED!');
-						} else {
-							alert('ERROR!');
-						}
-					};
-				}}
-			>
-				<div>
-					<Label>Email</Label>
-					<Input bind:value={email} />
-				</div>
-				<div>
-					<Label>First Name</Label>
-					<Input bind:value={firstName} />
-				</div>
-				<div>
-					<Label>Last Name</Label>
-					<Input bind:value={lastName} />
-				</div>
-				<div>
-					<Button type="submit">Update</Button>
-				</div>
-			</form>
-		</CardContent>
-		<Button href="/auth/logout">Logout</Button>
-	</Card>
-{:else}
-	<Button href="/auth/login">Login to the site!</Button>
-{/if}
+<div class="flex items-center">
+	<h1 class="text-lg font-semibold md:text-2xl">Inventory</h1>
+</div>
+<div class="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
+	<div class="flex flex-col items-center gap-1 text-center">
+		<h3 class="text-2xl font-bold tracking-tight">You have no products</h3>
+		<p class="text-sm text-muted-foreground">You can start selling as soon as you add a product.</p>
+		<Button class="mt-4">Add Product</Button>
+	</div>
+</div>
